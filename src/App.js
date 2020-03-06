@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import Table from './containers/tableData/table'
+import Table from './components/table'
 
 export default class App extends Component {
 

@@ -1,10 +1,12 @@
+import _ from 'lodash'
 const faker = require('faker');
+
 
 function generateUsers() {
 
   let users = []
 
-  for (let id=0; id <= 1000; id++) {
+  for (let id=0; id <= 20; id++) {
 
     let fullName = `${faker.name.firstName()} ${faker.name.lastName()}`;
     let country = faker.address.country();
@@ -29,6 +31,6 @@ function generateUsers() {
   return { users }
 }
 
-let dataObj = JSON.parse(JSON.stringify(generateUsers()));
+let dataObj = _.orderBy(JSON.parse(JSON.stringify(generateUsers())).users, 'id', "asc");
 
 export default dataObj

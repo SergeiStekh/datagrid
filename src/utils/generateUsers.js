@@ -6,7 +6,7 @@ function generateUsers() {
 
   let users = []
 
-  for (let id=0; id <= 20; id++) {
+  for (let id=0; id <= 1005; id++) {
 
     let fullName = `${faker.name.firstName()} ${faker.name.lastName()}`;
     let country = faker.address.country();

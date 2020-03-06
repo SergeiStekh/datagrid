@@ -1,7 +1,10 @@
-import { combineReducers } from 'redux'
+import dataObj from '../utils/generateUsers'
 
-import data from './data'
 
-export default combineReducers({
-  data
-})
+const initialState = {
+  data: dataObj
+}
+
+export default function rootReducer(state = initialState, action) {
+  return state
+}

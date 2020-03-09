@@ -14,7 +14,18 @@ export function sortTable(sortField, data, initialData, sortingMethod, sorted, s
     isSorted[sortField] = false;
   }
 
-  const sortType = sortingMethod === 'asc' ? 'desc' : 'asc';
+  let sortType = 'asc';
+  
+  if (sortedCounter[sortField] === 1 && sortingMethod === 'asc') {
+    sortType = 'desc'
+  }
+  if (sortedCounter[sortField] === 2 && sortingMethod === 'desc') {
+    sortType = 'asc'
+  }
+  if (sortedCounter[sortField] === 3 && sortingMethod === 'asc') {
+    sortType = 'asc'
+  }
+
   const orderedData = _.orderBy(cloneData, sortField, sortType);
   
   if (isSorted[sortField]) {

@@ -11,7 +11,7 @@ render() {
   let clsButtonUp = ['sort-buttons']
   let clsButtonDown = ['sort-buttons']
   
-  if (this.props.sorted['id']) {
+  if (this.props.sorted[this.props.sortField]) {
   if (this.props.sort === 'asc') {
     clsButtonDown.push('arrow-red')
   } else {
@@ -23,17 +23,38 @@ render() {
   <table className="table">
     <thead>
     <tr>
-      <th onClick={() => this.props.onClick("id", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount)} style={{position: "relative"}}>ID
-      <ArrowDropUpIcon style={{top: 5}} className={clsButtonUp.join(' ')}/> 
-      <ArrowDropDownIcon style={{bottom: 5}} className={clsButtonDown.join(' ')}/>
+      <th onClick={() => this.props.onClick("id", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>ID
+      <ArrowDropUpIcon style={{top: 5}} className={this.props.sorted['id'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
+      <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['id'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
       </th>
-      <th onClick={() => this.props.onClick("fullName", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount)}>Full name</th>
-      <th onClick={() => this.props.onClick("country", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount)}>Country</th>
-      <th onClick={() => this.props.onClick("city", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount)}>City</th>
-      <th onClick={() => this.props.onClick("zip", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount)}>ZIP</th>
-      <th onClick={() => this.props.onClick("company", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount)}>Company</th>
-      <th onClick={() => this.props.onClick("isAvailable", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount)}>isAvailable</th>
-      <th onClick={() => this.props.onClick("phone", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount)}>Phone</th>
+      <th onClick={() => this.props.onClick("fullName", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>Full name
+      <ArrowDropUpIcon style={{top: 5}} className={this.props.sorted['fullName'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
+      <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['fullName'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
+      </th>
+      <th onClick={() => this.props.onClick("country", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>Country
+      <ArrowDropUpIcon style={{top: 5}} className={this.props.sorted['country'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
+      <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['country'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
+      </th>
+      <th onClick={() => this.props.onClick("city", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>City
+      <ArrowDropUpIcon style={{top: 5}} className={this.props.sorted['city'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
+      <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['city'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
+      </th>
+      <th onClick={() => this.props.onClick("zip", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>ZIP
+      <ArrowDropUpIcon style={{top: 5}} className={this.props.sorted['zip'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
+      <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['zip'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
+      </th>
+      <th onClick={() => this.props.onClick("company", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>Company
+      <ArrowDropUpIcon style={{top: 5}} className={this.props.sorted['company'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
+      <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['company'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
+      </th>
+      <th onClick={() => this.props.onClick("isAvailable", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>isAvailable
+      <ArrowDropUpIcon style={{top: 5}} className={this.props.sorted['isAvailable'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
+      <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['isAvailable'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
+      </th>
+      <th onClick={() => this.props.onClick("phone", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>Phone
+      <ArrowDropUpIcon style={{top: 5}} className={this.props.sorted['phone'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
+      <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['phone'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
+      </th>
     </tr>
     </thead>
     <tbody>
@@ -63,13 +84,14 @@ function mapStateToProps(state) {
     sortField: state.sortField,
     sorted: state.sorted,
     sortedCount: state.sortedCount,
-    initialData: state.initialData
+    initialData: state.initialData,
+    previousSortField: state.previousSortField
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    onClick: (sortField, data, initialData, sortingMethod, sorted, sortedCount) => dispatch(sortTable(sortField, data, initialData, sortingMethod, sorted, sortedCount))
+    onClick: (sortField, data, initialData, sortingMethod, sorted, sortedCount, previousSortField) => dispatch(sortTable(sortField, data, initialData, sortingMethod, sorted, sortedCount, previousSortField))
   }
 }
 

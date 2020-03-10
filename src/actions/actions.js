@@ -1,10 +1,25 @@
 import {SORT_TABLE} from './actionTypes'
 import _ from 'lodash'
 
-export function sortTable(sortField, data, initialData, sortingMethod, sorted, sortedCount) {
+export function sortTable(sortField, data, initialData, sortingMethod, sorted, sortedCount, previousSortField) {
+  let previousSort = sortField;
+
   const cloneData = {...data};
   const isSorted = {...sorted};
   let sortedCounter = sortedCount;
+  let sortType = sortingMethod;
+
+
+  if (previousSortField && previousSort !== previousSortField) {
+    for (let sort in isSorted) {
+      isSorted[sort] = false
+    }
+    for (let sort in sortedCounter) {
+      sortedCounter[sort] = 0
+    }
+    sortType = 'desc'
+  }
+  
 
   isSorted[sortField] = true;
   if (sortedCounter[sortField] < 2) {
@@ -14,7 +29,7 @@ export function sortTable(sortField, data, initialData, sortingMethod, sorted, s
     isSorted[sortField] = false;
   }
 
-  let sortType = 'asc';
+  
   
   if (sortedCounter[sortField] === 1 && sortingMethod === 'asc') {
     sortType = 'desc'
@@ -25,8 +40,8 @@ export function sortTable(sortField, data, initialData, sortingMethod, sorted, s
   if (sortedCounter[sortField] === 3 && sortingMethod === 'asc') {
     sortType = 'asc'
   }
-
   const orderedData = _.orderBy(cloneData, sortField, sortType);
+  
   
   if (isSorted[sortField]) {
   return {
@@ -35,7 +50,8 @@ export function sortTable(sortField, data, initialData, sortingMethod, sorted, s
     sortingMethod: sortType,
     orderedData,
     sorted: isSorted,
-    sortedCounter
+    sortedCounter,
+    previousSortField: previousSort
   }
 } else {
   return {
@@ -44,7 +60,8 @@ export function sortTable(sortField, data, initialData, sortingMethod, sorted, s
     sortingMethod: sortType,
     orderedData: initialData,
     sorted: isSorted,
-    sortedCounter
+    sortedCounter,
+    previousSortField: previousSort
   }
 }
 }

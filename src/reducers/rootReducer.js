@@ -25,7 +25,8 @@ const initialState = {
       phone: 0
   },
   sort: "asc",
-  sortField: "id"
+  sortField: "id",
+  previousSortField: ''
 }
 
 export default function rootReducer(state = initialState, action) {
@@ -37,7 +38,8 @@ export default function rootReducer(state = initialState, action) {
       sortField: action.sortField,
       sorted: action.sorted,
       sortedCount: action.sortedCounter,
-      initialData: state.initialData
+      initialData: state.initialData,
+      previousSortField: action.previousSortField
     }
   }
   return state

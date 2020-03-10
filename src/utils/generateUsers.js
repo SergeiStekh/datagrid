@@ -13,8 +13,8 @@ function generateUsers() {
     let city = faker.address.city();
     let zip = faker.address.zipCode();
     let company = faker.company.companyName();
-    let isAvailable = faker.random.boolean();
     let phone = faker.phone.phoneNumber();
+    let isAvailable = faker.random.boolean();
 
     users.push({
         "id": id,
@@ -23,8 +23,8 @@ function generateUsers() {
         "city": city,
         "zip": zip,
         "company": company,
+        "phone": phone,
         "isAvailable": isAvailable,
-        "phone": phone
     });
   }
 

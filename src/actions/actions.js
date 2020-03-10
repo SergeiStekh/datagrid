@@ -1,4 +1,4 @@
-import {SORT_TABLE} from './actionTypes'
+import {SORT_TABLE, SORT_TABLE_BOOLEAN} from './actionTypes'
 import _ from 'lodash'
 
 export function sortTable(sortField, data, initialData, sortingMethod, sorted, sortedCount, previousSortField) {
@@ -64,4 +64,48 @@ export function sortTable(sortField, data, initialData, sortingMethod, sorted, s
     previousSortField: previousSort
   }
 }
+}
+
+export function sortTableBoolean(sortField, data, sortingMethod, sortedCount, sorted, previousSortField) {
+  let previousSort = sortField;
+
+  const cloneData = {...data};
+  let sortType = 'desc';
+  let sortedCounter = sortedCount;
+  const isSorted = {...sorted};
+  
+
+  if (previousSortField && previousSort !== previousSortField) {
+    for (let sort in isSorted) {
+      isSorted[sort] = false
+    }
+    for (let sort in sortedCounter) {
+      sortedCounter[sort] = 0
+    }
+    sortType = 'desc'
+  }
+
+  
+
+  if (sortingMethod === 'asc') {
+    sortType = 'desc'
+  } else {
+    sortType = 'asc'
+  }
+  const orderedData = _.orderBy(cloneData, sortField, sortType);
+  if (sortType === 'desc') {
+    isSorted[sortField] = true
+  } else {
+    isSorted[sortField] = false
+  }
+
+  return {
+    type: SORT_TABLE_BOOLEAN,
+    sortingMethod: sortType,
+    sortField,
+    orderedData,
+    sorted: isSorted,
+    sortedCount: sortedCounter,
+    previousSortField: previousSort
+  }
 }

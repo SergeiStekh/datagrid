@@ -1,4 +1,4 @@
-import {SORT_TABLE} from '../actions/actionTypes'
+import {SORT_TABLE, SORT_TABLE_BOOLEAN} from '../actions/actionTypes'
 import dataObj from '../utils/generateUsers'
 
 const initialState = {
@@ -38,6 +38,16 @@ export default function rootReducer(state = initialState, action) {
       sortField: action.sortField,
       sorted: action.sorted,
       sortedCount: action.sortedCounter,
+      initialData: state.initialData,
+      previousSortField: action.previousSortField
+    }
+    case SORT_TABLE_BOOLEAN: 
+    return {
+      data: action.orderedData,
+      sort: action.sortingMethod,
+      sortField: action.sortField,
+      sorted: action.sorted,
+      sortedCount: action.sortedCount,
       initialData: state.initialData,
       previousSortField: action.previousSortField
     }

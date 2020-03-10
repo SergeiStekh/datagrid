@@ -1,8 +1,11 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux'
-import { sortTable } from '../actions/actions'
+import { sortTable, sortTableBoolean } from '../actions/actions'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 import './table.css'
 
 class Table extends Component {
@@ -18,7 +21,7 @@ render() {
     clsButtonUp.push('arrow-red')
   }
   }
-
+console.log(this.props)
   return (
   <table className="table">
     <thead>
@@ -47,10 +50,14 @@ render() {
       <ArrowDropUpIcon style={{top: 5}} className={this.props.sorted['company'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
       <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['company'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
       </th>
-      <th onClick={() => this.props.onClick("isAvailable", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>isAvailable
-      <ArrowDropUpIcon style={{top: 5}} className={this.props.sorted['isAvailable'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
-      <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['isAvailable'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
-      </th>
+      <FormGroup row style={{marginTop: 12}}>
+      <FormControlLabel
+        control={
+          <Switch checked={this.props.sorted['isAvailable']} onClick={() => this.props.onClickBoolean("isAvailable", this.props.data, this.props.sort, this.props.sortedCount, this.props.sorted, this.props.previousSortField)} value="checkedA" />
+        }
+        label=""
+      /> 
+      </FormGroup>
       <th onClick={() => this.props.onClick("phone", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>Phone
       <ArrowDropUpIcon style={{top: 5}} className={this.props.sorted['phone'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
       <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['phone'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
@@ -66,7 +73,7 @@ render() {
           <td>{user.city}</td>
           <td style={{textAlign: "right"}}>{user.zip.toLocaleString()}</td>
           <td>{user.company}</td>
-          <td>{user.isAvailable ? "Yes" : "No"}</td>
+          <td>{user.isAvailable ? "isAvailable" : "Not available"}</td>
           <td style={{textAlign: "right"}}>{user.phone.toLocaleString()}</td>
         </tr>)
       }) : <div>Loading data</div>}
@@ -91,7 +98,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onClick: (sortField, data, initialData, sortingMethod, sorted, sortedCount, previousSortField) => dispatch(sortTable(sortField, data, initialData, sortingMethod, sorted, sortedCount, previousSortField))
+    onClick: (sortField, data, initialData, sortingMethod, sorted, sortedCount, previousSortField) => dispatch(sortTable(sortField, data, initialData, sortingMethod, sorted, sortedCount, previousSortField)),
+    onClickBoolean: (sortField, data, sortingMethod, sortedCount, sorted, previousSortField) => dispatch(sortTableBoolean(sortField, data, sortingMethod, sortedCount, sorted, previousSortField))
   }
 }
 

@@ -1,1 +1,2 @@
 export const SORT_TABLE = "SORT_TABLE"
+export const SORT_TABLE_BOOLEAN = "SORT_TABLE_BOOLEAN"

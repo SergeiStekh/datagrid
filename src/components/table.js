@@ -21,9 +21,9 @@ render() {
     clsButtonUp.push('arrow-red')
   }
   }
-console.log(this.props)
+
   return (
-  <table className="table">
+  <table className="table" >
     <thead>
     <tr>
       <th onClick={() => this.props.onClick("id", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>ID
@@ -50,7 +50,8 @@ console.log(this.props)
       <ArrowDropUpIcon style={{top: 5}} className={this.props.sorted['company'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
       <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['company'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
       </th>
-      <FormGroup row style={{marginTop: 12}}>
+      <th>
+      <FormGroup row style={{margin: 0, padding: 0, height: 30}}>
       <FormControlLabel
         control={
           <Switch checked={this.props.sorted['isAvailable']} onClick={() => this.props.onClickBoolean("isAvailable", this.props.data, this.props.sort, this.props.sortedCount, this.props.sorted, this.props.previousSortField)} value="checkedA" />
@@ -58,9 +59,17 @@ console.log(this.props)
         label=""
       /> 
       </FormGroup>
+      </th>
       <th onClick={() => this.props.onClick("phone", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>Phone
       <ArrowDropUpIcon style={{top: 5}} className={this.props.sorted['phone'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
       <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['phone'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
+      </th>
+      <th style={{position: "relative"}}>
+      <select>
+      <option value="communist">communist</option>
+      <option value="democrat">democrat</option>
+      <option value="republican">republican</option>
+      </select>
       </th>
     </tr>
     </thead>
@@ -75,6 +84,7 @@ console.log(this.props)
           <td>{user.company}</td>
           <td>{user.isAvailable ? "isAvailable" : "Not available"}</td>
           <td style={{textAlign: "right"}}>{user.phone.toLocaleString()}</td>
+          <td>{user.politicViews}</td>
         </tr>)
       }) : <div>Loading data</div>}
     </tbody>

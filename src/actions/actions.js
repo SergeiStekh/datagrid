@@ -1,4 +1,4 @@
-import {SORT_TABLE, SORT_TABLE_BOOLEAN} from './actionTypes'
+import {SORT_TABLE, SORT_TABLE_BOOLEAN, SORT_ENUM} from './actionTypes'
 import _ from 'lodash'
 
 export function sortTable(sortField, data, initialData, sortingMethod, sorted, sortedCount, previousSortField) {
@@ -108,4 +108,8 @@ export function sortTableBoolean(sortField, data, sortingMethod, sortedCount, so
     sortedCount: sortedCounter,
     previousSortField: previousSort
   }
+}
+
+export function sortEnum() {
+  
 }

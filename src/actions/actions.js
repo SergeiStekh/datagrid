@@ -136,8 +136,8 @@ export function sortEnum(sortField, data, sortingMethod, sortedCount, sorted, pr
   }
   
   let orderedData;
-  
-  if (event !== null) {
+  console.log(event)
+  if (event !== null && event.length !== 0) {
   orderedData = _.orderBy(data, o => {
     if (o.politicViews === event[0].value) {
       return o.politicViews

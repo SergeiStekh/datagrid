@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux'
-import { sortTable, sortTableBoolean } from '../actions/actions'
+import { sortTable, sortTableBoolean, sortEnum } from '../actions/actions'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -65,7 +65,12 @@ render() {
       <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['phone'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
       </th>
       <th style={{position: "relative"}}>
-      <select>
+      {/* <select onChange={(event) => this.props.onClickEnum('politicViews', this.props.data, this.props.sort, this.props.sortedCount, this.props.sorted, this.props.previousSortField)}> */}
+      <select onChange={(event) => {
+        return (
+          this.props.onClickEnum('politicViews', this.props.data, this.props.sort, this.props.sortedCount, this.props.sorted, this.props.previousSortField, event)
+        )
+      } }>
       <option value="communist">communist</option>
       <option value="democrat">democrat</option>
       <option value="republican">republican</option>
@@ -93,7 +98,6 @@ render() {
 } 
 }
 
-
 function mapStateToProps(state) {
   return {
     data: state.data,
@@ -109,7 +113,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     onClick: (sortField, data, initialData, sortingMethod, sorted, sortedCount, previousSortField) => dispatch(sortTable(sortField, data, initialData, sortingMethod, sorted, sortedCount, previousSortField)),
-    onClickBoolean: (sortField, data, sortingMethod, sortedCount, sorted, previousSortField) => dispatch(sortTableBoolean(sortField, data, sortingMethod, sortedCount, sorted, previousSortField))
+    onClickBoolean: (sortField, data, sortingMethod, sortedCount, sorted, previousSortField) => dispatch(sortTableBoolean(sortField, data, sortingMethod, sortedCount, sorted, previousSortField)),
+    onClickEnum: (sortField, data, sortingMethod, sortedCount, sorted, previousSortField, event) => dispatch(sortEnum(sortField, data, sortingMethod, sortedCount, sorted, previousSortField, event))
   }
 }
 

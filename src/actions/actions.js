@@ -110,6 +110,46 @@ export function sortTableBoolean(sortField, data, sortingMethod, sortedCount, so
   }
 }
 
-export function sortEnum() {
-  
+export function sortEnum(sortField, data, sortingMethod, sortedCount, sorted, previousSortField, event) {
+  console.log(event.target.value)
+  let previousSort = sortField;
+
+  const cloneData = {...data};
+  let sortType = sortingMethod;
+  let sortedCounter = {...sortedCount};
+  const isSorted = {...sorted};
+
+  if (previousSortField && previousSort !== previousSortField) {
+    for (let sort in isSorted) {
+      isSorted[sort] = false
+    }
+    for (let sort in sortedCounter) {
+      sortedCounter[sort] = 0
+    }
+    sortType = 'desc'
+  }
+
+  if (sortingMethod === 'asc') {
+    sortType = 'desc'
+  } else {
+    sortType = 'asc'
+  }
+
+
+  const orderedData = _.orderBy(data, o => {
+    if (o.politicViews === event.target.value) {
+      return o.politicViews
+    }
+  });
+
+
+  return {
+    type: SORT_ENUM,
+    sortField,
+    sortingMethod: sortType,
+    orderedData,
+    sorted: isSorted,
+    sortedCount: sortedCounter,
+    previousSortField: previousSort
+  }
 }

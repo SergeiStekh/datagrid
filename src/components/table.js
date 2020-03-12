@@ -6,10 +6,12 @@ import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
+import Select from 'react-select'
 import './table.css'
+import { brown } from '@material-ui/core/colors';
 
 class Table extends Component {
-
+  
 render() {
   let clsButtonUp = ['sort-buttons']
   let clsButtonDown = ['sort-buttons']
@@ -22,32 +24,73 @@ render() {
   }
   }
 
+  const options = [
+    { value: 'communist', label: 'Communist' },
+    { value: 'republican', label: 'Republican' },
+    { value: 'democrat', label: 'Democrat' }
+  ]
+
+  const colourStyles = {
+    control: styles => ({ ...styles, backgroundColor: 'white', width: 200 }),
+    option: (styles, { isDisabled, isFocused, isSelected }) => {
+      return {
+        ...styles,
+        backgroundColor: isDisabled 
+        ? null 
+        : isSelected
+        ? brown 
+        : isFocused 
+        ? 'red' :
+        null
+      }
+    },
+    multiValue: (styles) => {
+      return {
+        ...styles,
+        backgroundColor: 'orange',
+        width: 120,
+      }
+    },
+    multiValueLabel: (styles) => ({
+      ...styles,
+      color: 'green'
+    }),
+  }
+  
+  const selectComponent = () => (
+    <Select closeMenuOnSelect={false} styles={colourStyles} isMulti options={options} onChange={(event) => {
+      
+      return (
+        this.props.onClickEnum('politicViews', this.props.data, this.props.sort, this.props.sortedCount, this.props.sorted, this.props.previousSortField, event)
+      )
+    } }></Select>
+  )
   return (
   <table className="table" >
     <thead>
     <tr>
       <th onClick={() => this.props.onClick("id", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>ID
-      <ArrowDropUpIcon style={{top: 5}} className={this.props.sorted['id'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
+      <ArrowDropUpIcon style={{bottom: 20}} className={this.props.sorted['id'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
       <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['id'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
       </th>
       <th onClick={() => this.props.onClick("fullName", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>Full name
-      <ArrowDropUpIcon style={{top: 5}} className={this.props.sorted['fullName'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
+      <ArrowDropUpIcon style={{bottom: 20}} className={this.props.sorted['fullName'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
       <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['fullName'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
       </th>
       <th onClick={() => this.props.onClick("country", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>Country
-      <ArrowDropUpIcon style={{top: 5}} className={this.props.sorted['country'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
+      <ArrowDropUpIcon style={{bottom: 20}} className={this.props.sorted['country'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
       <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['country'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
       </th>
       <th onClick={() => this.props.onClick("city", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>City
-      <ArrowDropUpIcon style={{top: 5}} className={this.props.sorted['city'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
+      <ArrowDropUpIcon style={{bottom: 20}} className={this.props.sorted['city'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
       <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['city'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
       </th>
       <th onClick={() => this.props.onClick("zip", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>ZIP
-      <ArrowDropUpIcon style={{top: 5}} className={this.props.sorted['zip'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
+      <ArrowDropUpIcon style={{bottom: 20}} className={this.props.sorted['zip'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
       <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['zip'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
       </th>
       <th onClick={() => this.props.onClick("company", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>Company
-      <ArrowDropUpIcon style={{top: 5}} className={this.props.sorted['company'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
+      <ArrowDropUpIcon style={{bottom: 20}} className={this.props.sorted['company'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
       <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['company'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
       </th>
       <th>
@@ -61,20 +104,12 @@ render() {
       </FormGroup>
       </th>
       <th onClick={() => this.props.onClick("phone", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>Phone
-      <ArrowDropUpIcon style={{top: 5}} className={this.props.sorted['phone'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
+      <ArrowDropUpIcon style={{bottom: 20}} className={this.props.sorted['phone'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
       <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['phone'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
       </th>
       <th style={{position: "relative"}}>
       {/* <select onChange={(event) => this.props.onClickEnum('politicViews', this.props.data, this.props.sort, this.props.sortedCount, this.props.sorted, this.props.previousSortField)}> */}
-      <select onChange={(event) => {
-        return (
-          this.props.onClickEnum('politicViews', this.props.data, this.props.sort, this.props.sortedCount, this.props.sorted, this.props.previousSortField, event)
-        )
-      } }>
-      <option value="communist">communist</option>
-      <option value="democrat">democrat</option>
-      <option value="republican">republican</option>
-      </select>
+      {selectComponent()}
       </th>
     </tr>
     </thead>

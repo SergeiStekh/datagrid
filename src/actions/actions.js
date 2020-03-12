@@ -111,7 +111,7 @@ export function sortTableBoolean(sortField, data, sortingMethod, sortedCount, so
 }
 
 export function sortEnum(sortField, data, sortingMethod, sortedCount, sorted, previousSortField, event) {
-  console.log(event.target.value)
+  
   let previousSort = sortField;
 
   const cloneData = {...data};
@@ -134,20 +134,28 @@ export function sortEnum(sortField, data, sortingMethod, sortedCount, sorted, pr
   } else {
     sortType = 'asc'
   }
-
-
-  const orderedData = _.orderBy(data, o => {
-    if (o.politicViews === event.target.value) {
+  
+  let orderedData;
+  
+  if (event !== null) {
+  orderedData = _.orderBy(data, o => {
+    if (o.politicViews === event[0].value) {
       return o.politicViews
     }
+    if (event[1]) {
+    if (o.politicViews === event[1].value) {
+      return o.politicViews
+    }
+  }
   });
+}
 
 
   return {
     type: SORT_ENUM,
     sortField,
     sortingMethod: sortType,
-    orderedData,
+    orderedData: orderedData !== undefined ? orderedData : data,
     sorted: isSorted,
     sortedCount: sortedCounter,
     previousSortField: previousSort

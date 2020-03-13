@@ -2,7 +2,63 @@
   position: absolute;
 }
 
+.table-white {
+  background-color: white;
+}
+
 .arrow-red {
   color: red
 }
 
+.list {
+  height: 400px;
+  width: 100vw;
+}
+
+.table-header {
+  display: block;
+  position: relative;
+  width: 1700px;
+  margin-bottom: 30px;
+  background-color: black;
+  color: white;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.table-content {
+  display: block;
+  position: relative;
+  width: 1850;
+  margin-bottom: 30px;
+  background-color: white;
+  padding: 10px;
+  border-bottom: 1px solid gray;
+}
+
+.table-cell {
+  display: inline-block;
+  width: 130px;
+}
+
+.id {
+  width: 50px;
+}
+
+.country, .city, .fullName, .index, .phone {
+  width: 200px;
+}
+
+.company {
+  width: 300px;
+}
+
+.css-2b097c-container  { 
+  display: inline-block;
+  width: 200px;
+}
+
+
+.odd {
+  background-color: gray;
+}

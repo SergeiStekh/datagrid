@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux'
+import { FixedSizeList as List } from "react-window";
 import { sortTable, sortTableBoolean, sortEnum } from '../actions/actions'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
@@ -10,8 +11,8 @@ import Select from 'react-select'
 import './table.css'
 import { brown } from '@material-ui/core/colors';
 
+
 class Table extends Component {
-  
 render() {
   let clsButtonUp = ['sort-buttons']
   let clsButtonDown = ['sort-buttons']
@@ -31,69 +32,174 @@ render() {
   ]
 
   const colourStyles = {
-    control: styles => ({ ...styles, backgroundColor: 'white', width: 200 }),
+    control: styles => ({ ...styles, backgroundColor: 'white', width: 200, outline: "none" }),
     option: (styles, { isDisabled, isFocused, isSelected }) => {
       return {
         ...styles,
         backgroundColor: isDisabled 
         ? null 
         : isSelected
-        ? brown 
+        ? "red" 
         : isFocused 
-        ? 'red' :
+        ? 'gray' :
         null
       }
     },
     multiValue: (styles) => {
       return {
         ...styles,
-        backgroundColor: 'orange',
+        backgroundColor: 'gray',
         width: 120,
       }
     },
     multiValueLabel: (styles) => ({
       ...styles,
-      color: 'green'
+      color: 'black'
     }),
   }
   
+
+  let clsId = ['table-cell', 'id'];
+  let clsFullName = ['table-cell', 'fullName'];
+  let clsCountry = ['table-cell', 'country'];
+  let clsCity = ['table-cell', 'city'];
+  let clsIndex = ['table-cell', 'index'];
+  let clsCompany = ['table-cell', 'company'];
+  let clsIsAvailable = ['table-cell', 'isAvailable'];
+  let clsPhone = ['table-cell', 'phone'];
+  let clsPoliticViews = ['table-cell', 'politicViews'];
+  
+
   const selectComponent = () => (
-    <Select closeMenuOnSelect={false} styles={colourStyles} isMulti options={options} onChange={(event) => {
-      
+    <Select className="react-select-container" closeMenuOnSelect={false} styles={colourStyles} isMulti options={options} onChange={(event) => {
       return (
         this.props.onClickEnum('politicViews', this.props.data, this.props.sort, this.props.sortedCount, this.props.sorted, this.props.previousSortField, event)
       )
     } }></Select>
   )
+
+  const ComplexListItem = ({index, style}) => {
+    if (this.props.data) {
+    return (
+      <div className="table-content" style={style}>
+        <div className="table-row">
+          <div className="table-cell id">{this.props.data[index].id.toLocaleString()}</div>
+          <div className="table-cell fullName">{this.props.data[index].fullName}</div>
+          <div className="table-cell country">{this.props.data[index].country}</div>
+          <div className="table-cell city">{this.props.data[index].city}</div>
+          <div className="table-cell index">{this.props.data[index].zip.toLocaleString()}</div>
+          <div className="table-cell company">{this.props.data[index].company}</div>
+          <div className="table-cell isAvailable">{this.props.data[index].isAvailable ? "isAvailable" : "Not available"}</div>
+          <div className="table-cell phone">{this.props.data[index].phone.toLocaleString()}</div>
+          <div className="table-cell politicViews">{this.props.data[index].politicViews}</div>
+        </div>
+      </div> 
+    )
+    } else {
+      return 'loading'
+    }
+  }
+
+
   return (
-  <table className="table" >
-    <thead>
-    <tr>
-      <th onClick={() => this.props.onClick("id", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>ID
-      <ArrowDropUpIcon style={{bottom: 20}} className={this.props.sorted['id'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
-      <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['id'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
-      </th>
-      <th onClick={() => this.props.onClick("fullName", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>Full name
-      <ArrowDropUpIcon style={{bottom: 20}} className={this.props.sorted['fullName'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
-      <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['fullName'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
-      </th>
-      <th onClick={() => this.props.onClick("country", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>Country
-      <ArrowDropUpIcon style={{bottom: 20}} className={this.props.sorted['country'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
-      <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['country'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
-      </th>
-      <th onClick={() => this.props.onClick("city", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>City
-      <ArrowDropUpIcon style={{bottom: 20}} className={this.props.sorted['city'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
-      <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['city'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
-      </th>
-      <th onClick={() => this.props.onClick("zip", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>ZIP
-      <ArrowDropUpIcon style={{bottom: 20}} className={this.props.sorted['zip'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
-      <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['zip'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
-      </th>
-      <th onClick={() => this.props.onClick("company", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>Company
-      <ArrowDropUpIcon style={{bottom: 20}} className={this.props.sorted['company'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
-      <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['company'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
-      </th>
-      <th>
+  // <table className="table" >
+  //   <thead>
+  //   <tr>
+  //     <th onClick={() => this.props.onClick("id", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>ID
+  //     <ArrowDropUpIcon style={{bottom: 20}} className={this.props.sorted['id'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
+  //     <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['id'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
+  //     </th>
+  //     <th onClick={() => this.props.onClick("fullName", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>Full name
+  //     <ArrowDropUpIcon style={{bottom: 20}} className={this.props.sorted['fullName'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
+  //     <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['fullName'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
+  //     </th>
+  //     <th onClick={() => this.props.onClick("country", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>Country
+  //     <ArrowDropUpIcon style={{bottom: 20}} className={this.props.sorted['country'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
+  //     <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['country'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
+  //     </th>
+  //     <th onClick={() => this.props.onClick("city", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>City
+  //     <ArrowDropUpIcon style={{bottom: 20}} className={this.props.sorted['city'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
+  //     <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['city'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
+  //     </th>
+  //     <th onClick={() => this.props.onClick("zip", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>ZIP
+  //     <ArrowDropUpIcon style={{bottom: 20}} className={this.props.sorted['zip'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
+  //     <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['zip'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
+  //     </th>
+  //     <th onClick={() => this.props.onClick("company", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>Company
+  //     <ArrowDropUpIcon style={{bottom: 20}} className={this.props.sorted['company'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
+  //     <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['company'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
+  //     </th>
+  //     <th>
+  //     <FormGroup row style={{margin: 0, padding: 0, height: 30}}>
+  //     <FormControlLabel
+  //       control={
+  //         <Switch checked={this.props.sorted['isAvailable']} onClick={() => this.props.onClickBoolean("isAvailable", this.props.data, this.props.sort, this.props.sortedCount, this.props.sorted, this.props.previousSortField)} value="checkedA" />
+  //       }
+  //       label=""
+  //     /> 
+  //     </FormGroup>
+  //     </th>
+  //     <th onClick={() => this.props.onClick("phone", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>Phone
+  //     <ArrowDropUpIcon style={{bottom: 20}} className={this.props.sorted['phone'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
+  //     <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['phone'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
+  //     </th>
+  //     <th style={{position: "relative"}}>
+  //     {/* <select onChange={(event) => this.props.onClickEnum('politicViews', this.props.data, this.props.sort, this.props.sortedCount, this.props.sorted, this.props.previousSortField)}> */}
+  //     {selectComponent()}
+  //     </th>
+  //   </tr>
+  //   </thead>
+  //   <tbody>
+  //     {this.props.data ? this.props.data.map((user, index) => {
+  //       return (
+  //       <tr key={index}>
+  //         <td>{user.id.toLocaleString()}</td>
+  //         <td>{user.fullName}</td>
+  //         <td>{user.country}</td>
+  //         <td>{user.city}</td>
+  //         <td style={{textAlign: "right"}}>{user.zip.toLocaleString()}</td>
+  //         <td>{user.company}</td>
+  //         <td>{user.isAvailable ? "isAvailable" : "Not available"}</td>
+  //         <td style={{textAlign: "right"}}>{user.phone.toLocaleString()}</td>
+  //         <td>{user.politicViews}</td>
+  //       </tr>)
+  //     }) : <div>Loading data</div>}
+  //   </tbody>
+  // </table> 
+
+
+
+
+
+
+<div>
+    <div>
+    <div className='table-header'>
+      <div className={clsId.join(' ')} onClick={() => this.props.onClick("id", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>ID
+      <ArrowDropUpIcon style={{top: -5}} className={this.props.sorted['id'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
+      <ArrowDropDownIcon style={{top: 5}} className={this.props.sorted['id'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
+      </div>
+      <div className={clsFullName.join(' ')} onClick={() => this.props.onClick("fullName", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>Full name
+      <ArrowDropUpIcon style={{top: -5}} className={this.props.sorted['fullName'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
+      <ArrowDropDownIcon style={{top: 5}} className={this.props.sorted['fullName'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
+      </div>
+      <div className={clsCountry.join(' ')} onClick={() => this.props.onClick("country", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>Country
+      <ArrowDropUpIcon style={{top: -5}} className={this.props.sorted['country'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
+      <ArrowDropDownIcon style={{top: 5}} className={this.props.sorted['country'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
+      </div>
+      <div className={clsCity.join(' ')} onClick={() => this.props.onClick("city", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>City
+      <ArrowDropUpIcon style={{top: -5}} className={this.props.sorted['city'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
+      <ArrowDropDownIcon style={{top: 5}} className={this.props.sorted['city'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
+      </div>
+      <div className={clsIndex.join(' ')} onClick={() => this.props.onClick("zip", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>ZIP
+      <ArrowDropUpIcon style={{top: -5}} className={this.props.sorted['zip'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
+      <ArrowDropDownIcon style={{top: 5}} className={this.props.sorted['zip'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
+      </div>
+      <div className={clsCompany.join(' ')} onClick={() => this.props.onClick("company", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>Company
+      <ArrowDropUpIcon style={{top: -5}} className={this.props.sorted['company'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
+      <ArrowDropDownIcon style={{top: 5}} className={this.props.sorted['company'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
+      </div>
+      <div className={clsIsAvailable.join(' ') } >
       <FormGroup row style={{margin: 0, padding: 0, height: 30}}>
       <FormControlLabel
         control={
@@ -102,33 +208,30 @@ render() {
         label=""
       /> 
       </FormGroup>
-      </th>
-      <th onClick={() => this.props.onClick("phone", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>Phone
-      <ArrowDropUpIcon style={{bottom: 20}} className={this.props.sorted['phone'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
-      <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['phone'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
-      </th>
-      <th style={{position: "relative"}}>
+      </div>
+      <div className={clsPhone.join(' ')} onClick={() => this.props.onClick("phone", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>Phone
+      <ArrowDropUpIcon style={{top: -5}} className={this.props.sorted['phone'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
+      <ArrowDropDownIcon style={{top: 5}} className={this.props.sorted['phone'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
+      </div>
+      <div style={{position: "relative", display: "inline-block", color: "black"}}>
       {/* <select onChange={(event) => this.props.onClickEnum('politicViews', this.props.data, this.props.sort, this.props.sortedCount, this.props.sorted, this.props.previousSortField)}> */}
+      
       {selectComponent()}
-      </th>
-    </tr>
-    </thead>
-    <tbody>
-      {this.props.data ? this.props.data.map((user, index) => {
-        return (<tr key={index}>
-          <td>{user.id.toLocaleString()}</td>
-          <td>{user.fullName}</td>
-          <td>{user.country}</td>
-          <td>{user.city}</td>
-          <td style={{textAlign: "right"}}>{user.zip.toLocaleString()}</td>
-          <td>{user.company}</td>
-          <td>{user.isAvailable ? "isAvailable" : "Not available"}</td>
-          <td style={{textAlign: "right"}}>{user.phone.toLocaleString()}</td>
-          <td>{user.politicViews}</td>
-        </tr>)
-      }) : <div>Loading data</div>}
-    </tbody>
-  </table>
+      </div>
+    </div>
+    </div>
+  <List
+    className="table-white"
+    height={800}
+    width={1700}
+    itemCount={1006}
+    itemSize={85}
+    >
+    {({ index, style }) => (
+    <ComplexListItem style={style} className="table-white" index={index} />
+    )}
+  </List>
+  </div>
 )
 } 
 }

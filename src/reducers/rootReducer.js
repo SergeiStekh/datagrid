@@ -1,4 +1,4 @@
-import {SORT_TABLE, SORT_TABLE_BOOLEAN, SORT_ENUM} from '../actions/actionTypes'
+import {SORT_TABLE, SORT_TABLE_BOOLEAN, SORT_ENUM, VIRTUALIZATION_TOGGLE} from '../actions/actionTypes'
 import dataObj from '../utils/generateUsers'
 
 const initialState = {
@@ -12,7 +12,7 @@ const initialState = {
     zip: false,
     company: false,
     isAvailable: false,
-    phone: false
+    phone: false,
   },
   sortedCount: {
       id: 0,
@@ -26,7 +26,8 @@ const initialState = {
   },
   sort: "asc",
   sortField: "id",
-  previousSortField: ''
+  previousSortField: '',
+  isVirtualized: true
 }
 
 export default function rootReducer(state = initialState, action) {
@@ -39,7 +40,8 @@ export default function rootReducer(state = initialState, action) {
       sorted: action.sorted,
       sortedCount: action.sortedCounter,
       initialData: state.initialData,
-      previousSortField: action.previousSortField
+      previousSortField: action.previousSortField,
+      isVirtualized: state.isVirtualized
     }
     case SORT_TABLE_BOOLEAN: 
     return {
@@ -49,7 +51,8 @@ export default function rootReducer(state = initialState, action) {
       sorted: action.sorted,
       sortedCount: action.sortedCount,
       initialData: state.initialData,
-      previousSortField: action.previousSortField
+      previousSortField: action.previousSortField,
+      isVirtualized: state.isVirtualized
     }
     case SORT_ENUM: 
     return {
@@ -59,8 +62,20 @@ export default function rootReducer(state = initialState, action) {
       sorted: action.sorted,
       sortedCount: action.sortedCount,
       initialData: state.initialData,
-      previousSortField: action.previousSortField
+      previousSortField: action.previousSortField,
+      isVirtualized: state.isVirtualized
     }
+    case VIRTUALIZATION_TOGGLE:
+      return {
+        data: state.data,
+        sort: state.sortingMethod,
+        sortField: state.sortField,
+        sorted: state.sorted,
+        sortedCount: state.sortedCount,
+        initialData: state.initialData,
+        previousSortField: state.previousSortField,
+        isVirtualized: action.isVirtualized
+      }
   }
   return state
 }

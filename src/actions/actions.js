@@ -1,4 +1,4 @@
-import {SORT_TABLE, SORT_TABLE_BOOLEAN, SORT_ENUM} from './actionTypes'
+import {SORT_TABLE, SORT_TABLE_BOOLEAN, SORT_ENUM, VIRTUALIZATION_TOGGLE, SEARCH} from './actionTypes'
 import _ from 'lodash'
 
 export function sortTable(sortField, data, initialData, sortingMethod, sorted, sortedCount, previousSortField) {
@@ -159,5 +159,15 @@ export function sortEnum(sortField, data, sortingMethod, sortedCount, sorted, pr
     sorted: isSorted,
     sortedCount: sortedCounter,
     previousSortField: previousSort
+  }
+}
+
+export function toggleVirtualization(props, virtualization) {
+  return {
+    ...props,
+    type: VIRTUALIZATION_TOGGLE,
+    isVirtualized: !virtualization,
+    data:props.data,
+    sort: props.sort
   }
 }

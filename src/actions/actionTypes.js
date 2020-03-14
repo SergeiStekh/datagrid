@@ -1,3 +1,5 @@
 export const SORT_TABLE = "SORT_TABLE"
 export const SORT_TABLE_BOOLEAN = "SORT_TABLE_BOOLEAN"
 export const SORT_ENUM = "SORT_ENUM"
+export const VIRTUALIZATION_TOGGLE = "VIRTUALIZATION_TOGGLE"
+export const SEARCH = "SEARCH"

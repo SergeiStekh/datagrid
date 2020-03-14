@@ -1,12 +1,12 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux'
 import { FixedSizeList as List } from "react-window";
-import { sortTable, sortTableBoolean, sortEnum } from '../actions/actions'
+import { sortTable, sortTableBoolean, sortEnum, toggleVirtualization } from '../actions/actions'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
+import { Switch, TextField } from '@material-ui/core';
 import Select from 'react-select'
 import './table.css'
 import { brown } from '@material-ui/core/colors';
@@ -99,81 +99,109 @@ render() {
       return 'loading'
     }
   }
+console.log(this.props)
+
+
+
+let notVirtualizedData = 
+    <div>
+      <FormGroup row style={{margin: 0, padding: 0, height: 30, marginBottom: 20}}>
+      <FormControlLabel
+        control={
+          <Switch checked={this.props.isVirtualized} onClick={() => this.props.onToggleVirtualization(this.props, this.props.isVirtualized)} value="checkedB"></Switch>
+        }
+        label="Virtualization"
+      >
+      </FormControlLabel>
+      </FormGroup>
+    <table className="table" style={{width: 1700}} >
+    <thead>
+    <tr>
+      <th onClick={() => this.props.onClick("id", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>ID
+      <ArrowDropUpIcon style={{bottom: 20}} className={this.props.sorted['id'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
+      <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['id'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
+      </th>
+      <th onClick={() => this.props.onClick("fullName", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>Full name
+      <ArrowDropUpIcon style={{bottom: 20}} className={this.props.sorted['fullName'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
+      <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['fullName'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
+      </th>
+      <th onClick={() => this.props.onClick("country", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>Country
+      <ArrowDropUpIcon style={{bottom: 20}} className={this.props.sorted['country'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
+      <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['country'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
+      </th>
+      <th onClick={() => this.props.onClick("city", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>City
+      <ArrowDropUpIcon style={{bottom: 20}} className={this.props.sorted['city'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
+      <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['city'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
+      </th>
+      <th onClick={() => this.props.onClick("zip", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>ZIP
+      <ArrowDropUpIcon style={{bottom: 20}} className={this.props.sorted['zip'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
+      <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['zip'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
+      </th>
+      <th onClick={() => this.props.onClick("company", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>Company
+      <ArrowDropUpIcon style={{bottom: 20}} className={this.props.sorted['company'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
+      <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['company'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
+      </th>
+      <th>
+      <FormGroup row style={{margin: 0, padding: 0, height: 30}}>
+      <FormControlLabel
+        control={
+          <Switch checked={this.props.sorted['isAvailable']} onClick={() => this.props.onClickBoolean("isAvailable", this.props.data, this.props.sort, this.props.sortedCount, this.props.sorted, this.props.previousSortField)} value="checkedA" />
+        }
+        label=""
+      /> 
+      </FormGroup>
+      </th>
+      <th onClick={() => this.props.onClick("phone", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>Phone
+      <ArrowDropUpIcon style={{bottom: 20}} className={this.props.sorted['phone'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
+      <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['phone'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
+      </th>
+      <th style={{position: "relative"}}>
+      {selectComponent()}
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+      {this.props.data ? this.props.data.map((user, index) => {
+        return (
+        <tr key={index}>
+          <td>{user.id.toLocaleString()}</td>
+          <td>{user.fullName}</td>
+          <td>{user.country}</td>
+          <td>{user.city}</td>
+          <td style={{textAlign: "right"}}>{user.zip.toLocaleString()}</td>
+          <td>{user.company}</td>
+          <td>{user.isAvailable ? "isAvailable" : "Not available"}</td>
+          <td style={{textAlign: "right"}}>{user.phone.toLocaleString()}</td>
+          <td>{user.politicViews}</td>
+        </tr>)
+      }) : <div>Loading data</div>}
+    </tbody>
+  </table> 
+  </div>
+
+
+
 
 
   return (
-  // <table className="table" >
-  //   <thead>
-  //   <tr>
-  //     <th onClick={() => this.props.onClick("id", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>ID
-  //     <ArrowDropUpIcon style={{bottom: 20}} className={this.props.sorted['id'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
-  //     <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['id'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
-  //     </th>
-  //     <th onClick={() => this.props.onClick("fullName", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>Full name
-  //     <ArrowDropUpIcon style={{bottom: 20}} className={this.props.sorted['fullName'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
-  //     <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['fullName'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
-  //     </th>
-  //     <th onClick={() => this.props.onClick("country", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>Country
-  //     <ArrowDropUpIcon style={{bottom: 20}} className={this.props.sorted['country'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
-  //     <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['country'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
-  //     </th>
-  //     <th onClick={() => this.props.onClick("city", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>City
-  //     <ArrowDropUpIcon style={{bottom: 20}} className={this.props.sorted['city'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
-  //     <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['city'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
-  //     </th>
-  //     <th onClick={() => this.props.onClick("zip", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>ZIP
-  //     <ArrowDropUpIcon style={{bottom: 20}} className={this.props.sorted['zip'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
-  //     <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['zip'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
-  //     </th>
-  //     <th onClick={() => this.props.onClick("company", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>Company
-  //     <ArrowDropUpIcon style={{bottom: 20}} className={this.props.sorted['company'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
-  //     <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['company'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
-  //     </th>
-  //     <th>
-  //     <FormGroup row style={{margin: 0, padding: 0, height: 30}}>
-  //     <FormControlLabel
-  //       control={
-  //         <Switch checked={this.props.sorted['isAvailable']} onClick={() => this.props.onClickBoolean("isAvailable", this.props.data, this.props.sort, this.props.sortedCount, this.props.sorted, this.props.previousSortField)} value="checkedA" />
-  //       }
-  //       label=""
-  //     /> 
-  //     </FormGroup>
-  //     </th>
-  //     <th onClick={() => this.props.onClick("phone", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>Phone
-  //     <ArrowDropUpIcon style={{bottom: 20}} className={this.props.sorted['phone'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
-  //     <ArrowDropDownIcon style={{bottom: 5}} className={this.props.sorted['phone'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
-  //     </th>
-  //     <th style={{position: "relative"}}>
-  //     {/* <select onChange={(event) => this.props.onClickEnum('politicViews', this.props.data, this.props.sort, this.props.sortedCount, this.props.sorted, this.props.previousSortField)}> */}
-  //     {selectComponent()}
-  //     </th>
-  //   </tr>
-  //   </thead>
-  //   <tbody>
-  //     {this.props.data ? this.props.data.map((user, index) => {
-  //       return (
-  //       <tr key={index}>
-  //         <td>{user.id.toLocaleString()}</td>
-  //         <td>{user.fullName}</td>
-  //         <td>{user.country}</td>
-  //         <td>{user.city}</td>
-  //         <td style={{textAlign: "right"}}>{user.zip.toLocaleString()}</td>
-  //         <td>{user.company}</td>
-  //         <td>{user.isAvailable ? "isAvailable" : "Not available"}</td>
-  //         <td style={{textAlign: "right"}}>{user.phone.toLocaleString()}</td>
-  //         <td>{user.politicViews}</td>
-  //       </tr>)
-  //     }) : <div>Loading data</div>}
-  //   </tbody>
-  // </table> 
-
-
-
-
-
-
+  
+this.props.isVirtualized ?
 <div>
+<TextField id="outlined-basic" label="Search by name" variant="outlined" />
+<TextField id="outlined-basic" label="Search by country" variant="outlined" />
+<TextField id="outlined-basic" label="Search by city" variant="outlined" />
+<TextField id="outlined-basic" label="Search by ZIP" variant="outlined" />
+<TextField id="outlined-basic" label="Search by company" variant="outlined" />
     <div>
+      <FormGroup row style={{margin: 0, padding: 0, height: 30, marginBottom: 20}}>
+      <FormControlLabel
+        control={
+          <Switch checked={this.props.isVirtualized} onClick={() => this.props.onToggleVirtualization(this.props, this.props.isVirtualized)} value="checkedB"></Switch>
+        }
+        label="Virtualization"
+      >
+      </FormControlLabel>
+      </FormGroup>
     <div className='table-header'>
       <div className={clsId.join(' ')} onClick={() => this.props.onClick("id", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>ID
       <ArrowDropUpIcon style={{top: -5}} className={this.props.sorted['id'] ? clsButtonUp.join(' ') : 'sort-buttons'}/> 
@@ -231,7 +259,7 @@ render() {
     <ComplexListItem style={style} className="table-white" index={index} />
     )}
   </List>
-  </div>
+  </div> : notVirtualizedData
 )
 } 
 }
@@ -244,7 +272,8 @@ function mapStateToProps(state) {
     sorted: state.sorted,
     sortedCount: state.sortedCount,
     initialData: state.initialData,
-    previousSortField: state.previousSortField
+    previousSortField: state.previousSortField,
+    isVirtualized: state.isVirtualized
   }
 }
 
@@ -252,7 +281,8 @@ function mapDispatchToProps(dispatch) {
   return {
     onClick: (sortField, data, initialData, sortingMethod, sorted, sortedCount, previousSortField) => dispatch(sortTable(sortField, data, initialData, sortingMethod, sorted, sortedCount, previousSortField)),
     onClickBoolean: (sortField, data, sortingMethod, sortedCount, sorted, previousSortField) => dispatch(sortTableBoolean(sortField, data, sortingMethod, sortedCount, sorted, previousSortField)),
-    onClickEnum: (sortField, data, sortingMethod, sortedCount, sorted, previousSortField, event) => dispatch(sortEnum(sortField, data, sortingMethod, sortedCount, sorted, previousSortField, event))
+    onClickEnum: (sortField, data, sortingMethod, sortedCount, sorted, previousSortField, event) => dispatch(sortEnum(sortField, data, sortingMethod, sortedCount, sorted, previousSortField, event)),
+    onToggleVirtualization: (props, isVirtualized) => dispatch(toggleVirtualization(props, isVirtualized))
   }
 }
 

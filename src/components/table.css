@@ -39,6 +39,8 @@
 .table-cell {
   display: inline-block;
   width: 130px;
+  cursor: pointer;
+  
 }
 
 .id {
@@ -56,9 +58,4 @@
 .css-2b097c-container  { 
   display: inline-block;
   width: 200px;
-}
-
-
-.odd {
-  background-color: gray;
 }

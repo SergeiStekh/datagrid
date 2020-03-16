@@ -1,5 +1,6 @@
-import {SORT_TABLE, SORT_TABLE_BOOLEAN, SORT_ENUM, VIRTUALIZATION_TOGGLE, SEARCH} from './actionTypes'
+import {SORT_TABLE, SORT_TABLE_BOOLEAN, SORT_ENUM, VIRTUALIZATION_TOGGLE, SEARCH, PUSH_SHIFT, SELECT_ITEM, DELETE_ITEM} from './actionTypes'
 import _ from 'lodash'
+import { BottomNavigationAction } from '@material-ui/core';
 
 export function sortTable(sortField, data, initialData, sortingMethod, sorted, sortedCount, previousSortField) {
   let previousSort = sortField;
@@ -180,6 +181,7 @@ export function search(props, event) {
   
   let returnData;
 
+  if (!props.isShift) {
   switch(fieldType) {
     case 'name': 
     returnData = initialData.filter(name => {
@@ -208,10 +210,94 @@ export function search(props, event) {
     break;
     default: returnData = initialData;
   }
+}
+
+
+if (props.isShift) {
+  switch(fieldType) {
+    case 'name': 
+    returnData = props.returnData.filter(name => {
+      return name.fullName.toLowerCase().includes(input)
+    });
+    break;
+    case 'country':
+      returnData = props.returnData.filter(country => {
+        return country.country.toLowerCase().includes(input)
+    });
+    break;
+    case 'city':
+      returnData = props.returnData.filter(city => {
+        return city.city.toLowerCase().includes(input)
+    });
+    break;
+    case 'zip':
+      returnData = props.returnData.filter(zip => {
+        return zip.zip.toLowerCase().includes(input)
+    });
+    break;
+    case 'company':
+      console.log(returnData)
+      returnData = props.returnData.filter(company => {
+        return company.company.toLowerCase().includes(input)
+    });
+    break;
+    default: returnData = initialData;
+  }
+}
 
   return {
     ...props,
     type: SEARCH,
-    data: returnData
+    data: returnData,
+    returnData
+  } 
+}
+
+export function pushShift(props, event, toggle)  {
+  return {
+    ...props,
+    type: PUSH_SHIFT,
+    isShift: toggle,
+    returnData: props.returnData
+  }
+}
+
+export function selectItem(props, index, event) {
+  
+  let newData = [...props.data];
+  console.log(event)
+  props.data.map((element, ind) => {
+      element.clicked = false;
+    if (ind === index && !element.deleted) {
+      element.clicked = true
+      // newData.splice(ind, 1)
+    }
+  })
+
+  return {
+    ...props,
+    type: SELECT_ITEM,
+    data: newData
+  }
+} 
+
+
+export function deleteItem(props, index, event) {
+  event.stopPropagation()
+  let newData = [...props.data];
+  
+  props.data.map((element, ind) => {
+    element.deleted = false;
+    if (ind === index) {
+      element.deleted = true;
+      newData.splice(ind, 1)
+    }
+  })
+  console.log(newData)
+
+  return {
+    ...props,
+    type: DELETE_ITEM,
+    data: newData
   }
 }

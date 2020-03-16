@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux'
 import { FixedSizeList as List } from "react-window";
-import { sortTable, sortTableBoolean, sortEnum, toggleVirtualization, search } from '../actions/actions'
+import { sortTable, sortTableBoolean, sortEnum, toggleVirtualization, search, pushShift, selectItem, deleteItem } from '../actions/actions'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -13,6 +13,26 @@ import './table.css'
 
 class Table extends Component {
 render() {
+
+document.addEventListener('keydown', (event) => pushShift(event, this.props))
+
+document.addEventListener('keyup', (event) => releaseShift(event, this.props))
+
+
+function pushShift(e, props) {
+  if (e.shiftKey) {
+    props.onShift(props, e, true)
+    document.removeEventListener('keydown', (event) => pushShift(event, this.props))
+  } 
+}
+
+function releaseShift(e, props) {
+  if(e.key === "Shift") {
+    props.onShift(props, e, false)  
+  }
+  document.removeEventListener('keyup', (event) => releaseShift(event, this.props))
+}
+
   let clsButtonUp = ['sort-buttons']
   let clsButtonDown = ['sort-buttons']
   
@@ -75,6 +95,8 @@ render() {
       )
     } }></Select>
   )
+
+  
 
 let notVirtualizedData = 
     <div>
@@ -169,8 +191,9 @@ const ComplexListItem = ({index, style}) => {
   if (this.props.data) {
     if (this.props.data.length > 1) {
   return (
-    <div className="table-content" style={style}>
+    <div className={this.props.data[index].clicked ? "table-content active-content" : "table-content"} onClick={(event) => this.props.onSelectItem(this.props, index, event)} style={style}>
       <div className="table-row">
+        <button className="delete-item" onClick={(event) => this.props.onDeleteItem(this.props, index, event)}>X</button>
         <div className="table-cell id">{this.props.data[index].id.toLocaleString()}</div>
         <div className="table-cell fullName">{this.props.data[index].fullName}</div>
         <div className="table-cell country">{this.props.data[index].country}</div>
@@ -185,7 +208,7 @@ const ComplexListItem = ({index, style}) => {
   )
     } else {
       return (
-        <div className="table-content" style={style}>
+        <div className="table-content" id='listItems' style={style}>
           <div className="table-row">
             <div className="table-cell id">{this.props.data[0].id.toLocaleString()}</div>
             <div className="table-cell fullName">{this.props.data[0].fullName}</div>
@@ -204,7 +227,6 @@ const ComplexListItem = ({index, style}) => {
     return 'loading'
   }
 }
-
 
   return (
   
@@ -301,7 +323,9 @@ function mapStateToProps(state) {
     sortedCount: state.sortedCount,
     initialData: state.initialData,
     previousSortField: state.previousSortField,
-    isVirtualized: state.isVirtualized
+    isVirtualized: state.isVirtualized,
+    isShift: state.isShift,
+    returnData: state.returnData
   }
 }
 
@@ -311,7 +335,10 @@ function mapDispatchToProps(dispatch) {
     onClickBoolean: (sortField, data, sortingMethod, sortedCount, sorted, previousSortField) => dispatch(sortTableBoolean(sortField, data, sortingMethod, sortedCount, sorted, previousSortField)),
     onClickEnum: (sortField, data, sortingMethod, sortedCount, sorted, previousSortField, event) => dispatch(sortEnum(sortField, data, sortingMethod, sortedCount, sorted, previousSortField, event)),
     onToggleVirtualization: (props, isVirtualized) => dispatch(toggleVirtualization(props, isVirtualized)),
-    onSearch: (props, event) => dispatch(search(props, event))
+    onSearch: (props, event) => dispatch(search(props, event)),
+    onShift: (props, event, toggle) => dispatch(pushShift(props, event, toggle)),
+    onSelectItem: (props, index, event) => dispatch(selectItem(props, index, event)),
+    onDeleteItem: (props, index, event) => dispatch(deleteItem(props, index, event))
   }
 }
 

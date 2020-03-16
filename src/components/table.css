@@ -63,3 +63,15 @@
 .search-field {
   margin: 10px;
 }
+
+.active-content {
+  background-color: #DEFFCF;
+  border-radius: 5px;
+}
+
+.delete-item {
+  position: absolute;
+  top: 10px;
+  left: 28px;
+  z-index: 999;
+}

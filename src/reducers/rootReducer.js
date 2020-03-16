@@ -1,4 +1,4 @@
-import {SORT_TABLE, SORT_TABLE_BOOLEAN, SORT_ENUM, VIRTUALIZATION_TOGGLE} from '../actions/actionTypes'
+import {SORT_TABLE, SORT_TABLE_BOOLEAN, SORT_ENUM, VIRTUALIZATION_TOGGLE, SEARCH} from '../actions/actionTypes'
 import dataObj from '../utils/generateUsers'
 
 const initialState = {
@@ -76,6 +76,11 @@ export default function rootReducer(state = initialState, action) {
         previousSortField: state.previousSortField,
         isVirtualized: action.isVirtualized
       }
+      case SEARCH:
+        return {
+          ...state,
+          data: action.data
+        }
+        default: return state
   }
-  return state
 }

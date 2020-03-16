@@ -114,7 +114,6 @@ export function sortEnum(sortField, data, sortingMethod, sortedCount, sorted, pr
   
   let previousSort = sortField;
 
-  const cloneData = {...data};
   let sortType = sortingMethod;
   let sortedCounter = {...sortedCount};
   const isSorted = {...sorted};
@@ -169,5 +168,50 @@ export function toggleVirtualization(props, virtualization) {
     isVirtualized: !virtualization,
     data:props.data,
     sort: props.sort
+  }
+}
+
+export function search(props, event) {
+  
+  let input = event.target.value.toLowerCase();
+  let initialData = [...props.initialData]
+  
+  let fieldType = event.target.id;
+  
+  let returnData;
+
+  switch(fieldType) {
+    case 'name': 
+    returnData = initialData.filter(name => {
+      return name.fullName.toLowerCase().includes(input)
+    });
+    break;
+    case 'country':
+      returnData = initialData.filter(country => {
+        return country.country.toLowerCase().includes(input)
+    });
+    break;
+    case 'city':
+      returnData = initialData.filter(city => {
+        return city.city.toLowerCase().includes(input)
+    });
+    break;
+    case 'zip':
+      returnData = initialData.filter(zip => {
+        return zip.zip.toLowerCase().includes(input)
+    });
+    break;
+    case 'company':
+      returnData = initialData.filter(company => {
+        return company.company.toLowerCase().includes(input)
+    });
+    break;
+    default: returnData = initialData;
+  }
+
+  return {
+    ...props,
+    type: SEARCH,
+    data: returnData
   }
 }

@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux'
 import { FixedSizeList as List } from "react-window";
-import { sortTable, sortTableBoolean, sortEnum, toggleVirtualization } from '../actions/actions'
+import { sortTable, sortTableBoolean, sortEnum, toggleVirtualization, search } from '../actions/actions'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -9,7 +9,6 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { Switch, TextField } from '@material-ui/core';
 import Select from 'react-select'
 import './table.css'
-import { brown } from '@material-ui/core/colors';
 
 
 class Table extends Component {
@@ -67,7 +66,6 @@ render() {
   let clsCompany = ['table-cell', 'company'];
   let clsIsAvailable = ['table-cell', 'isAvailable'];
   let clsPhone = ['table-cell', 'phone'];
-  let clsPoliticViews = ['table-cell', 'politicViews'];
   
 
   const selectComponent = () => (
@@ -78,33 +76,20 @@ render() {
     } }></Select>
   )
 
-  const ComplexListItem = ({index, style}) => {
-    if (this.props.data) {
-    return (
-      <div className="table-content" style={style}>
-        <div className="table-row">
-          <div className="table-cell id">{this.props.data[index].id.toLocaleString()}</div>
-          <div className="table-cell fullName">{this.props.data[index].fullName}</div>
-          <div className="table-cell country">{this.props.data[index].country}</div>
-          <div className="table-cell city">{this.props.data[index].city}</div>
-          <div className="table-cell index">{this.props.data[index].zip.toLocaleString()}</div>
-          <div className="table-cell company">{this.props.data[index].company}</div>
-          <div className="table-cell isAvailable">{this.props.data[index].isAvailable ? "isAvailable" : "Not available"}</div>
-          <div className="table-cell phone">{this.props.data[index].phone.toLocaleString()}</div>
-          <div className="table-cell politicViews">{this.props.data[index].politicViews}</div>
-        </div>
-      </div> 
-    )
-    } else {
-      return 'loading'
-    }
-  }
-console.log(this.props)
-
-
-
 let notVirtualizedData = 
     <div>
+      <div>
+      <a href="https://app.rs.school/course/score?course=react-2020-Q1">
+        <img style={{height: 30, margin: 20}} src='https://app.rs.school/static/images/logo-rsschool3.png' alt='logo'></img>
+      </a>
+      <form noValidate autoComplete="off" style={{width: 1100}}>
+        <TextField style={{marginRight: 20}} margin='normal' id="name" onChange={(event) => this.props.onSearch(this.props, event)} label="Search by name" variant="outlined" />
+        <TextField style={{marginRight: 20}} margin='normal' id="country" onChange={(event) => this.props.onSearch(this.props, event)} label="Search by country" variant="outlined" />
+        <TextField style={{marginRight: 20}} margin='normal' id="city" onChange={(event) => this.props.onSearch(this.props, event)} label="Search by city" variant="outlined" />
+        <TextField style={{marginRight: 20}} margin='normal' id="zip" onChange={(event) => this.props.onSearch(this.props, event)} label="Search by ZIP" variant="outlined" />
+        <TextField margin='normal' id="company" onChange={(event) => this.props.onSearch(this.props, event)} label="Search by company" variant="outlined" />
+      </form>
+      </div>
       <FormGroup row style={{margin: 0, padding: 0, height: 30, marginBottom: 20}}>
       <FormControlLabel
         control={
@@ -114,7 +99,7 @@ let notVirtualizedData =
       >
       </FormControlLabel>
       </FormGroup>
-    <table className="table" style={{width: 1700}} >
+    <table className="table" style={{textAlign: "center"}}>
     <thead>
     <tr>
       <th onClick={() => this.props.onClick("id", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>ID
@@ -180,18 +165,63 @@ let notVirtualizedData =
   </div>
 
 
-
+const ComplexListItem = ({index, style}) => {
+  if (this.props.data) {
+    if (this.props.data.length > 1) {
+  return (
+    <div className="table-content" style={style}>
+      <div className="table-row">
+        <div className="table-cell id">{this.props.data[index].id.toLocaleString()}</div>
+        <div className="table-cell fullName">{this.props.data[index].fullName}</div>
+        <div className="table-cell country">{this.props.data[index].country}</div>
+        <div className="table-cell city">{this.props.data[index].city}</div>
+        <div className="table-cell index">{this.props.data[index].zip.toLocaleString()}</div>
+        <div className="table-cell company">{this.props.data[index].company}</div>
+        <div className="table-cell isAvailable">{this.props.data[index].isAvailable ? "isAvailable" : "Not available"}</div>
+        <div className="table-cell phone">{this.props.data[index].phone.toLocaleString()}</div>
+        <div className="table-cell politicViews">{this.props.data[index].politicViews}</div>
+      </div>
+    </div> 
+  )
+    } else {
+      return (
+        <div className="table-content" style={style}>
+          <div className="table-row">
+            <div className="table-cell id">{this.props.data[0].id.toLocaleString()}</div>
+            <div className="table-cell fullName">{this.props.data[0].fullName}</div>
+            <div className="table-cell country">{this.props.data[0].country}</div>
+            <div className="table-cell city">{this.props.data[0].city}</div>
+            <div className="table-cell index">{this.props.data[0].zip.toLocaleString()}</div>
+            <div className="table-cell company">{this.props.data[0].company}</div>
+            <div className="table-cell isAvailable">{this.props.data[0].isAvailable ? "isAvailable" : "Not available"}</div>
+            <div className="table-cell phone">{this.props.data[0].phone.toLocaleString()}</div>
+            <div className="table-cell politicViews">{this.props.data[0].politicViews}</div>
+          </div>
+        </div> 
+      )
+    }
+  } else {
+    return 'loading'
+  }
+}
 
 
   return (
   
 this.props.isVirtualized ?
 <div>
-<TextField id="outlined-basic" label="Search by name" variant="outlined" />
-<TextField id="outlined-basic" label="Search by country" variant="outlined" />
-<TextField id="outlined-basic" label="Search by city" variant="outlined" />
-<TextField id="outlined-basic" label="Search by ZIP" variant="outlined" />
-<TextField id="outlined-basic" label="Search by company" variant="outlined" />
+  <div>
+      <a href="https://app.rs.school/course/score?course=react-2020-Q1">
+        <img style={{height: 30, margin: 20}} src='https://app.rs.school/static/images/logo-rsschool3.png' alt='logo'></img>
+      </a>
+  </div>
+<form noValidate autoComplete="off" style={{width: 1700}}>
+<TextField style={{marginLeft: 50, marginRight: 10}} margin='normal' id="name" onChange={(event) => this.props.onSearch(this.props, event)} label="Search by name" variant="outlined" />
+<TextField style={{marginRight: 10}} margin='normal' id="country" onChange={(event) => this.props.onSearch(this.props, event)} label="Search by country" variant="outlined" />
+<TextField style={{marginRight: 10}} margin='normal' id="city" onChange={(event) => this.props.onSearch(this.props, event)} label="Search by city" variant="outlined" />
+<TextField style={{marginRight: 10}} margin='normal' id="zip" onChange={(event) => this.props.onSearch(this.props, event)} label="Search by ZIP" variant="outlined" />
+<TextField margin='normal' id="company" onChange={(event) => this.props.onSearch(this.props, event)} label="Search by company" variant="outlined" />
+</form>
     <div>
       <FormGroup row style={{margin: 0, padding: 0, height: 30, marginBottom: 20}}>
       <FormControlLabel
@@ -242,17 +272,15 @@ this.props.isVirtualized ?
       <ArrowDropDownIcon style={{top: 5}} className={this.props.sorted['phone'] ? clsButtonDown.join(' ') : 'sort-buttons'}/>
       </div>
       <div style={{position: "relative", display: "inline-block", color: "black"}}>
-      {/* <select onChange={(event) => this.props.onClickEnum('politicViews', this.props.data, this.props.sort, this.props.sortedCount, this.props.sorted, this.props.previousSortField)}> */}
-      
       {selectComponent()}
       </div>
     </div>
     </div>
   <List
     className="table-white"
-    height={800}
+    height={600}
     width={1700}
-    itemCount={1006}
+    itemCount={this.props.data.length}
     itemSize={85}
     >
     {({ index, style }) => (
@@ -282,7 +310,8 @@ function mapDispatchToProps(dispatch) {
     onClick: (sortField, data, initialData, sortingMethod, sorted, sortedCount, previousSortField) => dispatch(sortTable(sortField, data, initialData, sortingMethod, sorted, sortedCount, previousSortField)),
     onClickBoolean: (sortField, data, sortingMethod, sortedCount, sorted, previousSortField) => dispatch(sortTableBoolean(sortField, data, sortingMethod, sortedCount, sorted, previousSortField)),
     onClickEnum: (sortField, data, sortingMethod, sortedCount, sorted, previousSortField, event) => dispatch(sortEnum(sortField, data, sortingMethod, sortedCount, sorted, previousSortField, event)),
-    onToggleVirtualization: (props, isVirtualized) => dispatch(toggleVirtualization(props, isVirtualized))
+    onToggleVirtualization: (props, isVirtualized) => dispatch(toggleVirtualization(props, isVirtualized)),
+    onSearch: (props, event) => dispatch(search(props, event))
   }
 }
 

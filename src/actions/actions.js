@@ -1,6 +1,5 @@
 import {SORT_TABLE, SORT_TABLE_BOOLEAN, SORT_ENUM, VIRTUALIZATION_TOGGLE, SEARCH, PUSH_SHIFT, SELECT_ITEM, DELETE_ITEM} from './actionTypes'
 import _ from 'lodash'
-import { BottomNavigationAction } from '@material-ui/core';
 
 export function sortTable(sortField, data, initialData, sortingMethod, sorted, sortedCount, previousSortField) {
   let previousSort = sortField;
@@ -136,7 +135,7 @@ export function sortEnum(sortField, data, sortingMethod, sortedCount, sorted, pr
   }
   
   let orderedData;
-  console.log(event)
+
   if (event !== null && event.length !== 0) {
   orderedData = _.orderBy(data, o => {
     if (o.politicViews === event[0].value) {
@@ -236,7 +235,7 @@ if (props.isShift) {
     });
     break;
     case 'company':
-      console.log(returnData)
+    
       returnData = props.returnData.filter(company => {
         return company.company.toLowerCase().includes(input)
     });
@@ -265,9 +264,10 @@ export function pushShift(props, event, toggle)  {
 export function selectItem(props, index, event) {
   
   let newData = [...props.data];
-  console.log(event)
-  props.data.map((element, ind) => {
-      element.clicked = false;
+  
+  props.data.forEach((element, ind) => {
+      
+    if(!props.isShift) {element.clicked = false}
     if (ind === index && !element.deleted) {
       element.clicked = true
       // newData.splice(ind, 1)
@@ -286,14 +286,13 @@ export function deleteItem(props, index, event) {
   event.stopPropagation()
   let newData = [...props.data];
   
-  props.data.map((element, ind) => {
+  props.data.forEach((element, ind) => {
     element.deleted = false;
     if (ind === index) {
       element.deleted = true;
       newData.splice(ind, 1)
     }
   })
-  console.log(newData)
 
   return {
     ...props,

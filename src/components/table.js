@@ -170,8 +170,8 @@ let notVirtualizedData =
     <tbody>
       {this.props.data ? this.props.data.map((user, index) => {
         return (
-        <tr key={index}>
-          <td>{user.id.toLocaleString()}</td>
+        <tr key={index} className={this.props.data[index].clicked ? "active-content" : null} onClick={(event) => this.props.onSelectItem(this.props, index, event)}>
+          <td><button style={{position: "absolute", left: 50}} onClick={(event) => this.props.onDeleteItem(this.props, index, event)}>Х</button>{user.id.toLocaleString()}</td>
           <td>{user.fullName}</td>
           <td>{user.country}</td>
           <td>{user.city}</td>

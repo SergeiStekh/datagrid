@@ -1,8 +1,8 @@
-import {SORT_TABLE, SORT_TABLE_BOOLEAN, SORT_ENUM, VIRTUALIZATION_TOGGLE, SEARCH, PUSH_SHIFT, SELECT_ITEM, DELETE_ITEM} from '../actions/actionTypes'
+import {SORT_TABLE, SORT_TABLE_BOOLEAN, SORT_ENUM, VIRTUALIZATION_TOGGLE, SEARCH, PUSH_SHIFT, SELECT_ITEM, DELETE_ITEM, DISPLAY_COLUMNS} from '../actions/actionTypes'
 import dataObj from '../utils/generateUsers'
 
 const initialState = {
-  initialData: dataObj,
+  initialData: JSON.parse(JSON.stringify(dataObj)),
   data: dataObj,
   sorted: {
     id: false,
@@ -23,6 +23,17 @@ const initialState = {
       company: 0,
       isAvailable: 0,
       phone: 0
+  },
+  showColumn: {
+    id: true,
+    fullName: true,
+    country: true,
+    city: true,
+    zip: true,
+    company: true,
+    isAvailable: true,
+    phone: true,
+    politicViews: true
   },
   sort: "asc",
   sortField: "id",
@@ -90,6 +101,12 @@ export default function rootReducer(state = initialState, action) {
       return {
         ...state,
         data: action.data
+      }
+    case DISPLAY_COLUMNS:
+      return {
+        ...state,
+        data: action.data,
+        showColumn: action.showColumn
       }
       default: return state
   }

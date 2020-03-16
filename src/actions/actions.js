@@ -1,4 +1,4 @@
-import {SORT_TABLE, SORT_TABLE_BOOLEAN, SORT_ENUM, VIRTUALIZATION_TOGGLE, SEARCH, PUSH_SHIFT, SELECT_ITEM, DELETE_ITEM} from './actionTypes'
+import {SORT_TABLE, SORT_TABLE_BOOLEAN, SORT_ENUM, VIRTUALIZATION_TOGGLE, SEARCH, PUSH_SHIFT, SELECT_ITEM, DELETE_ITEM, DISPLAY_COLUMNS} from './actionTypes'
 import _ from 'lodash'
 
 export function sortTable(sortField, data, initialData, sortingMethod, sorted, sortedCount, previousSortField) {
@@ -253,6 +253,7 @@ if (props.isShift) {
 }
 
 export function pushShift(props, event, toggle)  {
+  event.preventDefault();
   return {
     ...props,
     type: PUSH_SHIFT,
@@ -262,15 +263,17 @@ export function pushShift(props, event, toggle)  {
 }
 
 export function selectItem(props, index, event) {
-  
+  event.preventDefault();
   let newData = [...props.data];
   
   props.data.forEach((element, ind) => {
       
-    if(!props.isShift) {element.clicked = false}
+    if(!props.isShift) {
+      element.clicked = false
+    }
+
     if (ind === index && !element.deleted) {
       element.clicked = true
-      // newData.splice(ind, 1)
     }
   })
 
@@ -298,5 +301,117 @@ export function deleteItem(props, index, event) {
     ...props,
     type: DELETE_ITEM,
     data: newData
+  }
+}
+
+export function displayColumns(props, event) {
+  let newData=[...props.data];
+  let initialData = JSON.parse(JSON.stringify(props.initialData));
+  
+  let showData = {...props.showColumn};
+  let field = event.target.value;
+
+  if (field === "id") {
+    showData.id = !showData.id;
+    if (!showData.id) {
+      newData = newData.map((element, index) => {
+      delete element.id
+      return element
+    })
+  } else {
+    newData = initialData
+  }
+  }
+
+  if (field === "fullName") {
+    showData.fullName = !showData.fullName;
+    if (!showData.fullName) {
+      newData = newData.map((element, index) => {
+      delete element.fullName
+      return element
+    })
+  } else {
+    newData = initialData
+  }
+  }
+
+  if (field === "country") {
+    showData.country = !showData.country;
+    if (!showData.country) {
+      newData = newData.map((element, index) => {
+      delete element.country
+      return element
+    })
+  } else {
+    newData = initialData
+  }
+  }
+
+  if (field === "city") {
+    showData.city = !showData.city;
+    if (!showData.city) {
+      newData = newData.map((element, index) => {
+      delete element.city
+      return element
+    })
+  } else {
+    newData = initialData
+  }
+  }
+
+  if (field === "zip") {
+    showData.zip = !showData.zip;
+    if (!showData.zip) {
+      newData = newData.map((element, index) => {
+      delete element.zip
+      return element
+    })
+  } else {
+    newData = initialData
+  }
+  }
+
+  if (field === "company") {
+    showData.company = !showData.company;
+    if (!showData.company) {
+      newData = newData.map((element, index) => {
+      delete element.company
+      return element
+    })
+  } else {
+    newData = initialData
+  }
+  }
+
+  if (field === "phone") {
+    showData.phone = !showData.phone;
+    if (!showData.phone) {
+      newData = newData.map((element, index) => {
+      delete element.phone
+      return element
+    })
+  } else {
+    newData = initialData
+  }
+  }
+
+  if (field === "politicViews") {
+    showData.politicViews = !showData.politicViews;
+    if (!showData.politicViews) {
+      newData = newData.map((element, index) => {
+      delete element.politicViews
+      return element
+    })
+  } else {
+    newData = initialData
+  }
+  }
+
+
+  return {
+    ...props,
+    type: DISPLAY_COLUMNS,
+    data: showData.field ? initialData : newData,
+    showColumn: showData
   }
 }

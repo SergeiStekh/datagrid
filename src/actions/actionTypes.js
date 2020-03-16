@@ -6,3 +6,5 @@ export const SEARCH = "SEARCH"
 export const PUSH_SHIFT = "PUSH_SHIFT"
 export const SELECT_ITEM = "SELECT_ITEM"
 export const DELETE_ITEM = "DELETE_ITEM"
+export const DISPLAY_COLUMNS = "DISPLAY_COLUMNS"
+

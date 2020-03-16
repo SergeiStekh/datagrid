@@ -1,12 +1,12 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux'
 import { FixedSizeList as List } from "react-window";
-import { sortTable, sortTableBoolean, sortEnum, toggleVirtualization, search, pushShift, selectItem, deleteItem } from '../actions/actions'
+import { sortTable, sortTableBoolean, sortEnum, toggleVirtualization, search, pushShift, selectItem, deleteItem, displayColumns } from '../actions/actions'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import { Switch, TextField } from '@material-ui/core';
+import { Switch, TextField, Checkbox } from '@material-ui/core';
 import Select from 'react-select'
 import './table.css'
 
@@ -171,14 +171,14 @@ let notVirtualizedData =
       {this.props.data ? this.props.data.map((user, index) => {
         return (
         <tr key={index} className={this.props.data[index].clicked ? "active-content" : null} onClick={(event) => this.props.onSelectItem(this.props, index, event)}>
-          <td><button style={{position: "absolute", left: 50}} onClick={(event) => this.props.onDeleteItem(this.props, index, event)}>Х</button>{user.id.toLocaleString()}</td>
+          <td><button style={{position: "absolute", left: 50}} onClick={(event) => this.props.onDeleteItem(this.props, index, event)}>Х</button>{user.id ? user.id.toLocaleString() : null}</td>
           <td>{user.fullName}</td>
           <td>{user.country}</td>
           <td>{user.city}</td>
-          <td style={{textAlign: "right"}}>{user.zip.toLocaleString()}</td>
+          <td style={{textAlign: "right"}}>{user.zip ? user.zip.toLocaleString() : null}</td>
           <td>{user.company}</td>
           <td>{user.isAvailable ? "isAvailable" : "Not available"}</td>
-          <td style={{textAlign: "right"}}>{user.phone.toLocaleString()}</td>
+          <td style={{textAlign: "right"}}>{user.phone ? user.phone.toLocaleString() : null}</td>
           <td>{user.politicViews}</td>
         </tr>)
       }) : <div>Loading data</div>}
@@ -194,14 +194,14 @@ const ComplexListItem = ({index, style}) => {
     <div className={this.props.data[index].clicked ? "table-content active-content" : "table-content"} onClick={(event) => this.props.onSelectItem(this.props, index, event)} style={style}>
       <div className="table-row">
         <button className="delete-item" onClick={(event) => this.props.onDeleteItem(this.props, index, event)}>X</button>
-        <div className="table-cell id">{this.props.data[index].id.toLocaleString()}</div>
+        <div className="table-cell id">{this.props.data[index].id || this.props.data[index].id === 0 ? this.props.data[index].id.toLocaleString() : null}</div>
         <div className="table-cell fullName">{this.props.data[index].fullName}</div>
         <div className="table-cell country">{this.props.data[index].country}</div>
         <div className="table-cell city">{this.props.data[index].city}</div>
-        <div className="table-cell index">{this.props.data[index].zip.toLocaleString()}</div>
+        <div className="table-cell index">{this.props.data[index].zip ? this.props.data[index].zip.toLocaleString() : null}</div>
         <div className="table-cell company">{this.props.data[index].company}</div>
         <div className="table-cell isAvailable">{this.props.data[index].isAvailable ? "isAvailable" : "Not available"}</div>
-        <div className="table-cell phone">{this.props.data[index].phone.toLocaleString()}</div>
+        <div className="table-cell phone">{this.props.data[index].phone ? this.props.data[index].phone.toLocaleString() : null}</div>
         <div className="table-cell politicViews">{this.props.data[index].politicViews}</div>
       </div>
     </div> 
@@ -237,7 +237,7 @@ this.props.isVirtualized ?
         <img style={{height: 30, margin: 20}} src='https://app.rs.school/static/images/logo-rsschool3.png' alt='logo'></img>
       </a>
   </div>
-<form noValidate autoComplete="off" style={{width: 1700}}>
+<form noValidate autoComplete="false" style={{width: 1700}}>
 <TextField style={{marginLeft: 50, marginRight: 10}} margin='normal' id="name" onChange={(event) => this.props.onSearch(this.props, event)} label="Search by name" variant="outlined" />
 <TextField style={{marginRight: 10}} margin='normal' id="country" onChange={(event) => this.props.onSearch(this.props, event)} label="Search by country" variant="outlined" />
 <TextField style={{marginRight: 10}} margin='normal' id="city" onChange={(event) => this.props.onSearch(this.props, event)} label="Search by city" variant="outlined" />
@@ -245,7 +245,7 @@ this.props.isVirtualized ?
 <TextField margin='normal' id="company" onChange={(event) => this.props.onSearch(this.props, event)} label="Search by company" variant="outlined" />
 </form>
     <div>
-      <FormGroup row style={{margin: 0, padding: 0, height: 30, marginBottom: 20}}>
+      <FormGroup row style={{margin: 0, padding: 0, height: 30, marginBottom: 20, width: 1700}}>
       <FormControlLabel
         control={
           <Switch checked={this.props.isVirtualized} onClick={() => this.props.onToggleVirtualization(this.props, this.props.isVirtualized)} value="checkedB"></Switch>
@@ -253,6 +253,14 @@ this.props.isVirtualized ?
         label="Virtualization"
       >
       </FormControlLabel>
+      <FormControlLabel control={<Checkbox value="id" onClick={(event) => this.props.onShowColumn(this.props, event)} checked={this.props.showColumn.id}/>} label="Show ID" />
+      <FormControlLabel control={<Checkbox value="fullName" onClick={(event) => this.props.onShowColumn(this.props, event)} checked={this.props.showColumn.fullName}/>} label="Show fullName" />
+      <FormControlLabel control={<Checkbox value="country" onClick={(event) => this.props.onShowColumn(this.props, event)} checked={this.props.showColumn.country}/>} label="Show country" />
+      <FormControlLabel control={<Checkbox value="city" onClick={(event) => this.props.onShowColumn(this.props, event)} checked={this.props.showColumn.city}/>} label="Show city" />
+      <FormControlLabel control={<Checkbox value="zip" onClick={(event) => this.props.onShowColumn(this.props, event)} checked={this.props.showColumn.zip}/>} label="Show ZIP" />
+      <FormControlLabel control={<Checkbox value="company"  onClick={(event) => this.props.onShowColumn(this.props, event)} checked={this.props.showColumn.company}/>} label="Show company" />
+      <FormControlLabel control={<Checkbox value="phone" onClick={(event) => this.props.onShowColumn(this.props, event)}  checked={this.props.showColumn.phone}/>} label="Show phone" />
+      <FormControlLabel control={<Checkbox value="politicViews" onClick={(event) => this.props.onShowColumn(this.props, event)}  checked={this.props.showColumn.politicViews}/>} label="Show politicViews" />
       </FormGroup>
     <div className='table-header'>
       <div className={clsId.join(' ')} onClick={() => this.props.onClick("id", this.props.data, this.props.initialData, this.props.sort, this.props.sorted, this.props.sortedCount, this.props.previousSortField)} style={{position: "relative"}}>ID
@@ -325,7 +333,8 @@ function mapStateToProps(state) {
     previousSortField: state.previousSortField,
     isVirtualized: state.isVirtualized,
     isShift: state.isShift,
-    returnData: state.returnData
+    returnData: state.returnData,
+    showColumn: state.showColumn
   }
 }
 
@@ -338,7 +347,8 @@ function mapDispatchToProps(dispatch) {
     onSearch: (props, event) => dispatch(search(props, event)),
     onShift: (props, event, toggle) => dispatch(pushShift(props, event, toggle)),
     onSelectItem: (props, index, event) => dispatch(selectItem(props, index, event)),
-    onDeleteItem: (props, index, event) => dispatch(deleteItem(props, index, event))
+    onDeleteItem: (props, index, event) => dispatch(deleteItem(props, index, event)),
+    onShowColumn: (props, event) => dispatch(displayColumns(props, event))
   }
 }
 

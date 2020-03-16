@@ -10,7 +10,6 @@ import { Switch, TextField, Checkbox } from '@material-ui/core';
 import Select from 'react-select'
 import './table.css'
 
-
 class Table extends Component {
 render() {
 
